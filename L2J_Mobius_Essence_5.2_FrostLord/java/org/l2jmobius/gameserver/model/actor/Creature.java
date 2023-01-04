@@ -1258,6 +1258,13 @@ public abstract class Creature extends WorldObject implements ISkillsHolder, IDe
 					_hitTask = ThreadPool.schedule(() -> onFirstHitTimeForDual(weaponItem, attack, timeToHit, timeAtk, timeToHit2), timeToHit);
 					break;
 				}
+				case PISTOLS:
+				{
+					final int reuse = Formulas.calculateReuseTime(this, weaponItem);
+					_disableRangedAttackEndTime = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(reuse);
+					_hitTask = ThreadPool.schedule(() -> onHitTimeNotDual(weaponItem, attack, timeToHit, timeAtk), timeToHit);
+					break;
+				}
 				default:
 				{
 					_hitTask = ThreadPool.schedule(() -> onHitTimeNotDual(weaponItem, attack, timeToHit, timeAtk), timeToHit);
